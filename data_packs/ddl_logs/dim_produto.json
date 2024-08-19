@@ -1,0 +1,7 @@
+{
+    "data_criacao": "2024-08-19 01:09:39.914336",
+    "tipo": "create",
+    "nome": "dim_produto",
+    "query": "CREATE TABLE dim_produto (table_id VARCHAR(100),produto VARCHAR(100),tamanho VARCHAR(100),colecao VARCHAR(100),modelo VARCHAR(100),categoria VARCHAR(100),chave VARCHAR(100),custo VARCHAR(100),)",
+    "drop": "DROP TABLE dim_produto"
+}
