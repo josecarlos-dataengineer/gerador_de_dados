@@ -43,6 +43,16 @@ CREATE TABLE [dbo].[dim_vendedores](
 ) ON [PRIMARY]
 ```
 
+
+### Versão do SQL:
+```sql
+select @@version
+```
+
+***Microsoft SQL Server 2019 (RTM) - 15.0.2000.5 (X64)   Sep 24 2019 13:48:23   Copyright (C) 2019 Microsoft Corporation  Developer Edition (64-bit) on Windows 10 Home 10.0 <X64> (Build 19045: ) (Hypervisor) ***
+
+
+
 O tamanho de cada tabela é ajustável, através do ajuste dos argumentos das funções.
 
 No exemplo abaixo, está sendo criada uma tabela com 10 linhas, sendo femininos 60% dos nomes
