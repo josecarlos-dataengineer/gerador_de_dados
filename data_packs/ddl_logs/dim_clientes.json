@@ -1,7 +1,0 @@
-{
-    "data_criacao": "2024-08-19 01:09:44.991500",
-    "tipo": "create",
-    "nome": "dim_clientes",
-    "query": "CREATE TABLE dim_clientes (chave VARCHAR(100),nome VARCHAR(100),idade VARCHAR(100),genero VARCHAR(100),uf VARCHAR(100),cidade VARCHAR(100),)",
-    "drop": "DROP TABLE dim_clientes"
-}

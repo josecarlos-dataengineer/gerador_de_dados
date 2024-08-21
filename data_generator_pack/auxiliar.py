@@ -3,8 +3,9 @@ import uuid
 import pandas as pd
 import datetime as dt
 import json
+import datetime
 
-DDL_PATH = r"C:\Users\SALA443\Desktop\Projetos\use_cases\gerador_de_dados\data_packs\ddl_logs"
+DDL_PATH = r"C:\Users\SALA443\Desktop\Projetos\use_cases\gerador_de_dados\data_generator_pack\ddl_logs"
 
 def gerador_de_nomes(tamanho_da_lista=10,distribuicao=0.5) -> list:
     """_summary_
@@ -267,11 +268,11 @@ def cria_sql_ddl(dicionario:dict,tipo="create",nome_tabela="tabela_exemplo"):
     if tipo == "create":
         
         for n in dicionario.keys():
-            string = string.__add__(f"{n} VARCHAR(100),")
+            string = string.__add__(f"{n} VARCHAR(200),")
 
         string
-
-        query = f"CREATE TABLE {nome_tabela} ({string})".rstrip(",")
+        # query = f"CREATE TABLE IF  {nome_tabela} ({string})".rstrip(",")
+        query = f"if not exists (select * from sysobjects where name='{nome_tabela}' and xtype='U') CREATE TABLE  {nome_tabela} ({string})".rstrip(",")
         drop = f"DROP TABLE {nome_tabela}"
         with open(DDL_PATH+"\\"+nome_tabela+".json",mode="w+") as file:
             data = str(dt.datetime.now())
@@ -369,3 +370,49 @@ def adiciona_float_a_entidade(data:dict,entidade:str,nome_da_nova_chave:str,min:
     data[nome_da_nova_chave] = keys
 
     return data  
+
+def cria_tabela_vendas(tamanho_lista:int,dim_produto:pd.DataFrame,df_clientes:pd.DataFrame,df_vendedores:pd.DataFrame):
+    vendas_dict = {}
+
+    lista_id_venda = []
+    lista_id_produto = []
+    lista_id_cliente = []
+    lista_id_vendedor = []
+    lista_id_quantidade = []
+    lista_data_venda = []
+    lista_lucro = []
+    lista_comissao_negociada = [] 
+    
+    for n in range(tamanho_lista):
+        
+        chaves_produtos = list(dim_produto["chave"])
+        chaves_clientes = list(df_clientes["chave"])
+        chaves_vendedores = list(df_vendedores["chave"])
+
+        n_produtos = random.randint(0,len(chaves_produtos) -1)
+        n_clientes = random.randint(0,len(chaves_clientes) -1)
+        n_vendedores = random.randint(0,len(chaves_vendedores) -1)
+
+        chaves_produtos[n_produtos]
+        chaves_clientes[n_clientes]
+        chaves_vendedores[n_vendedores]    
+        
+        lista_id_venda.append(uuid.uuid4().hex[:16])
+        lista_id_produto.append(chaves_produtos[n_produtos])
+        lista_id_cliente.append(chaves_clientes[n_clientes])
+        lista_id_vendedor.append(chaves_vendedores[n_vendedores])
+        lista_id_quantidade.append(random.randint(1,4))
+        lista_data_venda.append(datetime.datetime.now().date())
+        lista_lucro.append(random.randint(50,100)/100)
+        lista_comissao_negociada.append(random.randint(3,15)/100)
+
+    vendas_dict = {"id_venda":lista_id_venda,
+                "id_produto":lista_id_produto,
+                "id_cliente":lista_id_cliente,
+                "id_vendedor":lista_id_vendedor,
+                "quantidade":lista_id_quantidade,
+                "data_venda":lista_data_venda,
+                "lucro":lista_lucro,
+                "comissao_negociada":lista_comissao_negociada}
+    
+    return vendas_dict

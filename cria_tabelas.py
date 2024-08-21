@@ -1,8 +1,7 @@
-from data_packs.auxiliar import *
-from data_packs.generator import *
+from data_generator_pack.auxiliar import *
+from data_generator_pack.generator import *
 import pandas as pd
-
-
+import datetime as dt
 
 # cria tabela produtos
 
@@ -68,7 +67,7 @@ cria_tabelas_sql(cria_sql_ddl(dicionario=dim_produto,tipo="create",nome_tabela="
 
 a,b,c = pyodbc_insert_params(dim_produto)
 
-writes_into_sqlserver(df,"dim_produto",cursor,cnx,a,b,c)
+writes_into_sqlserver(df,"dim_produto",a,b,c)
 
 
 # cria tabela clientes
@@ -83,7 +82,7 @@ cria_tabelas_sql(cria_sql_ddl(dicionario=clientes,tipo="create",nome_tabela="dim
 
 a,b,c = pyodbc_insert_params(clientes)
 
-writes_into_sqlserver(df_clientes,"dim_clientes",cursor,cnx,a,b,c)
+writes_into_sqlserver(df_clientes,"dim_clientes",a,b,c)
 
 
 # cria tabela vendedores
@@ -97,8 +96,23 @@ cria_tabelas_sql(cria_sql_ddl(dicionario=clientes,tipo="create",nome_tabela="dim
 
 a,b,c = pyodbc_insert_params(vendedores)
 
-writes_into_sqlserver(df_vendedores,"dim_vendedores",cursor,cnx,a,b,c)
+writes_into_sqlserver(df_vendedores,"dim_vendedores",a,b,c)
 
+# cria tabela vendas
+vendas_dicionario = cria_tabela_vendas(tamanho_lista=50,
+                        dim_produto=dim_produto,
+                        df_clientes=df_clientes,
+                        df_vendedores=df_vendedores)
+
+a,b,c = pyodbc_insert_params(vendas_dicionario)
+cria_tabelas_sql(cria_sql_ddl(dicionario=vendas_dicionario,tipo="create",nome_tabela="fato_vendas"))
+df_vendas = pd.DataFrame(vendas_dicionario)
+
+
+df_vendas['data_venda'] = df_vendas['data_venda'].astype(str)
+df_vendas['data_venda'] = df_vendas['data_venda'].replace('-', '',regex=True)
+
+writes_into_sqlserver(df_vendas,"fato_vendas",a,b,c)
 
 
 
