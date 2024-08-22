@@ -13,7 +13,8 @@ from time import sleep
 table_params = {"rows_limit":100}
 
 # Carrega as variáveis do arquivo .env
-load_dotenv(r"C:\Users\SALA443\Desktop\Projetos\use_cases\gerador_de_dados\.env")
+# load_dotenv("/workspaces/app/.env")
+load_dotenv(r"C:\Users\SALA443\Desktop\Projetos\use_cases\data_series_5_data_vault\gerador_de_dados\.env")
 
 def set_pyodbc_cursor() -> object:
      
@@ -75,7 +76,8 @@ def writes_into_sqlserver(dataframe:pd.DataFrame,tabela,columns_names:str,questi
                exec(f'cursor.execute(f"INSERT INTO dbo.{tabela} {columns_names} values{question_marks}", {columns})')
                cnxn.commit()
           cursor.close()
-     
+          print(f"tabela {tabela} inserida no banco de dados")
+     print(f"tabela {tabela} já atualizada")
 
 def checa_se_tabela_existe(nome_tabela):
     cursor, cnxn = set_pyodbc_cursor()

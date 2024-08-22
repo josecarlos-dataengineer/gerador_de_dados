@@ -5,7 +5,7 @@ import datetime as dt
 import json
 import datetime
 
-DDL_PATH = r"C:\Users\SALA443\Desktop\Projetos\use_cases\gerador_de_dados\data_generator_pack\ddl_logs"
+DDL_PATH = r"C:\Users\SALA443\Desktop\Projetos\use_cases\data_series_5_data_vault\gerador_de_dados\data_generator_pack\ddl_logs"
 
 def gerador_de_nomes(tamanho_da_lista=10,distribuicao=0.5) -> list:
     """_summary_
@@ -416,3 +416,22 @@ def cria_tabela_vendas(tamanho_lista:int,dim_produto:pd.DataFrame,df_clientes:pd
                 "comissao_negociada":lista_comissao_negociada}
     
     return vendas_dict
+
+def cria_chave_produtos(dicionario):
+    # Criar uma lista para armazenar os UUIDs gerados
+    uuids = []
+    
+    # Iterar por cada índice no dicionário
+    for i in range(len(dicionario['produto'])):
+        # Combinar os valores de 'produto', 'modelo', 'tamanho' e 'colecao'
+        chave_combinada = f"{dicionario['produto'][i]}_{dicionario['tamanho'][i]}_{dicionario['colecao'][i]}_{dicionario['modelo'][i]}"
+        
+        # Gerar um UUID baseado na combinação
+        chave_unica = uuid.uuid5(uuid.NAMESPACE_DNS, chave_combinada).hex
+        
+        # Adicionar o UUID gerado à lista
+        uuids.append(chave_unica)
+    
+    # Retornar o dicionário com os UUIDs
+    dicionario['chave'] = uuids
+    return dicionario

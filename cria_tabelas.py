@@ -47,19 +47,25 @@ calcados = cria_dicionario_preenchido(\
     modelo=lista_de_modelos_calçados,
     categoria = lista_de_categoria)
 
-dicionario1 = cria_dicionario_padronizado(produtos,tamanho_lista=5)
+dicionario1 = cria_dicionario_padronizado(produtos,tamanho_lista=100)
 
-dicionario2 = cria_dicionario_padronizado(acessorios,tamanho_lista=5)
+dicionario2 = cria_dicionario_padronizado(acessorios,tamanho_lista=100)
 
-dicionario3 = cria_dicionario_padronizado(calcados,tamanho_lista=5)
+dicionario3 = cria_dicionario_padronizado(calcados,tamanho_lista=100)
 
 data = integra_dicionario(integra_dicionario(dicionario1,dicionario2),dicionario3) 
 
-dim_produto = adiciona_chave_a_entidade(data,'produto')
+
+dim_produto = cria_chave_produtos(data)
+
+# dim_produto = adiciona_chave_a_entidade(data,'produto')
 
 dim_produto = adiciona_float_a_entidade(data=dim_produto,entidade="chave",nome_da_nova_chave="custo",min=1000,max=2000)
 
 df = pd.DataFrame(dim_produto)
+df = df.drop_duplicates(subset=["produto","tamanho","colecao","modelo","categoria"], keep='first')
+
+data = pd.DataFrame(data).drop_duplicates(subset=["produto","tamanho","colecao","modelo","categoria"], keep='first')
 
 cursor, cnx = set_pyodbc_cursor()
 
@@ -117,3 +123,7 @@ writes_into_sqlserver(df_vendas,"fato_vendas",a,b,c)
 
 
 
+
+
+    
+    
